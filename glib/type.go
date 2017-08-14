@@ -32,3 +32,10 @@ const (
 	TYPE_OBJECT    Type = C.G_TYPE_OBJECT
 	TYPE_VARIANT   Type = C.G_TYPE_VARIANT
 )
+
+func gbool(b bool) C.gboolean {
+	if b {
+		return C.gboolean(1)
+	}
+	return C.gboolean(0)
+}

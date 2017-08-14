@@ -156,7 +156,7 @@ func marshalPointer(p unsafe.Pointer) interface{} {
 
 func marshalObject(p unsafe.Pointer) interface{} {
 	c := C.g_value_get_object((*C.GValue)(p))
-	return newObject((*C.GObject)(c))
+	return WrapObject(unsafe.Pointer(c))
 }
 
 func marshalVariant(p unsafe.Pointer) interface{} {

@@ -1,5 +1,14 @@
-PKGS = ./fixtures/... ./glib/...
+PKGS = ./fixtures/... ./glib/... ./gtk/...
 
+all: export GOPATH=${PWD}/../../../..
+all:
+	@echo "--> Build"
+	@go build -i ${PKGS}
+
+bin.examples: export GOPATH=${PWD}/../../../..
+bin.examples:
+	@echo "--> Build examples"
+	@go build -i -o bin/simple ./examples/simple
 
 format: export GOPATH=${PWD}/../../../..
 format:

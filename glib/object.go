@@ -8,14 +8,16 @@ import (
 	"unsafe"
 )
 
+type SignalHandle uint
+
 // Object is a representation of GLib's GObject.
 type Object struct {
 	GObject *C.GObject
 }
 
-// newObject creates a new Object from a GObject pointer.
-func newObject(p *C.GObject) *Object {
-	obj := &Object{GObject: p}
+// WrapObject creates a new Object from a GObject pointer.
+func WrapObject(p unsafe.Pointer) *Object {
+	obj := &Object{GObject: (*C.GObject)(p)}
 
 	if C.g_object_is_floating(C.gpointer(obj.GObject)) != 0 {
 		C.g_object_ref_sink(C.gpointer(obj.GObject))
@@ -31,7 +33,7 @@ func finalizeObject(obj *Object) {
 }
 
 func NewObject(gType Type) *Object {
-	return newObject(C._g_object_new(C.GType(gType)))
+	return WrapObject(unsafe.Pointer(C._g_object_new(C.GType(gType))))
 }
 
 // Ref is a wrapper around g_object_ref().
@@ -116,4 +118,24 @@ func (v *Object) SetProperty(name string, value interface{}) {
 	if p := GValue(value); p != nil {
 		C.g_object_set_property(v.GObject, (*C.gchar)(cstr), p.GValue)
 	}
+}
+
+func (v *Object) connectClosure(after bool, detailedSignal string, f func()) (SignalHandle, error) {
+	cstr := C.CString(detailedSignal)
+	defer C.free(unsafe.Pointer(cstr))
+
+	closure, err := ClosureNew(f)
+	if err != nil {
+		return 0, err
+	}
+	c := C.g_signal_connect_closure(C.gpointer(v.GObject), (*C.gchar)(cstr), closure, gbool(after))
+	return SignalHandle(c), nil
+}
+
+func (v *Object) Connect(detailedSignal string, f func()) (SignalHandle, error) {
+	return v.connectClosure(false, detailedSignal, f)
+}
+
+func (v *Object) ConnectAfter(detailedSignal string, f func()) (SignalHandle, error) {
+	return v.connectClosure(true, detailedSignal, f)
 }

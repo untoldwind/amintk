@@ -32,6 +32,14 @@ enum
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
+enum
+{
+  CHANGED = 1,
+  N_SIGNALS
+};
+
+static guint file_signals[N_SIGNALS] = { 0, };
+
 static void
 viewer_file_set_property (GObject      *object,
                           guint         property_id,
@@ -137,11 +145,29 @@ viewer_file_class_init (ViewerFileClass *klass)
   g_object_class_install_properties (object_class,
                                      N_PROPERTIES,
                                      obj_properties);
+
+                                     file_signals[CHANGED] =
+  g_signal_newv ("changed",
+                G_TYPE_FROM_CLASS (object_class),
+                G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                NULL /* closure */,
+                NULL /* accumulator */,
+                NULL /* accumulator data */,
+                NULL /* C marshaller */,
+                G_TYPE_NONE /* return_type */,
+                0     /* n_params */,
+                NULL  /* param_types */);
 }
 
 static void
 viewer_file_init (ViewerFile *self)
 {
+}
+
+static void
+_viewer_file_emit_changed(gpointer self)
+{
+  g_signal_emit (self, file_signals[CHANGED], 0 /* details */);
 }
 
 #endif
