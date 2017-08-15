@@ -1,7 +1,9 @@
 package glib
 
 // #cgo pkg-config: glib-2.0 gobject-2.0
-// #include "idle_timeout.go.h"
+// #include <stdlib.h>
+// #include <glib.h>
+// #include <glib-object.h>
 import "C"
 import (
 	"errors"

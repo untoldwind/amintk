@@ -1,7 +1,8 @@
 package gtk
 
 // #cgo pkg-config: gtk+-3.0
-// #include "window.go.h"
+// #include <stdlib.h>
+// #include <gtk/gtk.h>
 import "C"
 import (
 	"unsafe"

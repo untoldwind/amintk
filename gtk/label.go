@@ -1,7 +1,8 @@
 package gtk
 
 // #cgo pkg-config: gtk+-3.0
-// #include "label.go.h"
+// #include <stdlib.h>
+// #include <gtk/gtk.h>
 import "C"
 import (
 	"unsafe"
@@ -34,4 +35,33 @@ func LabelNew(str string) *Label {
 
 func wrapLabel(obj *glib.Object) *Label {
 	return &Label{Widget{glib.InitiallyUnowned{Object: obj}}}
+}
+
+// SetText is a wrapper around gtk_label_set_text().
+func (v *Label) SetText(str string) {
+	cstr := C.CString(str)
+	defer C.free(unsafe.Pointer(cstr))
+	C.gtk_label_set_text(v.native(), (*C.gchar)(cstr))
+}
+
+// SetMarkup is a wrapper around gtk_label_set_markup().
+func (v *Label) SetMarkup(str string) {
+	cstr := C.CString(str)
+	defer C.free(unsafe.Pointer(cstr))
+	C.gtk_label_set_markup(v.native(), (*C.gchar)(cstr))
+}
+
+// SetMarkupWithMnemonic is a wrapper around
+// gtk_label_set_markup_with_mnemonic().
+func (v *Label) SetMarkupWithMnemonic(str string) {
+	cstr := C.CString(str)
+	defer C.free(unsafe.Pointer(cstr))
+	C.gtk_label_set_markup_with_mnemonic(v.native(), (*C.gchar)(cstr))
+}
+
+// SetPattern is a wrapper around gtk_label_set_pattern().
+func (v *Label) SetPattern(patern string) {
+	cstr := C.CString(patern)
+	defer C.free(unsafe.Pointer(cstr))
+	C.gtk_label_set_pattern(v.native(), (*C.gchar)(cstr))
 }

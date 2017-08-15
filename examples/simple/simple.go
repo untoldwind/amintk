@@ -1,6 +1,8 @@
 package main
 
-import "github.com/untoldwind/amintk/gtk"
+import (
+	"github.com/untoldwind/amintk/gtk"
+)
 
 func main() {
 	gtk.Init(nil)

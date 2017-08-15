@@ -56,8 +56,8 @@ func ClosureNew(f interface{}) (*C.GClosure, error) {
 // (along with rf and userdata) even after an object has been destroyed and
 // the GClosure is invalidated and will never run.
 //
-//export removeClosure
-func removeClosure(_ C.gpointer, closure *C.GClosure) {
+//export callbackRemoveClosure
+func callbackRemoveClosure(_ C.gpointer, closure *C.GClosure) {
 	closures.Lock()
 	delete(closures.m, closure)
 	closures.Unlock()
@@ -69,8 +69,8 @@ func removeClosure(_ C.gpointer, closure *C.GClosure) {
 // than there are to give, a warning is printed to stderr and the closure is
 // not run.
 //
-//export goMarshal
-func goMarshal(closure *C.GClosure, retValue *C.GValue,
+//export callbackGoMarshal
+func callbackGoMarshal(closure *C.GClosure, retValue *C.GValue,
 	nParams C.guint, params *C.GValue,
 	invocationHint C.gpointer, marshalData *C.GValue) {
 
