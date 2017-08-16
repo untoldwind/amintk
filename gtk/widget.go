@@ -7,6 +7,7 @@ import "C"
 import (
 	"unsafe"
 
+	"github.com/untoldwind/amintk/gdk"
 	"github.com/untoldwind/amintk/glib"
 )
 
@@ -72,6 +73,18 @@ func (v *Widget) ShowAll() {
 // Destroy is a wrapper around gtk_widget_destroy().
 func (v *Widget) Destroy() {
 	C.gtk_widget_destroy(v.native())
+}
+
+// GetToplevel is a wrapper around gtk_widget_get_toplevel().
+func (v *Widget) GetToplevel() *Widget {
+	c := C.gtk_widget_get_toplevel(v.native())
+	return wrapWidget(glib.WrapObject(unsafe.Pointer(c)))
+}
+
+// IsToplevel is a wrapper around gtk_widget_is_toplevel().
+func (v *Widget) IsToplevel() bool {
+	c := C.gtk_widget_is_toplevel(v.native())
+	return gobool(c)
 }
 
 // SetNoShowAll is a wrapper around gtk_widget_set_no_show_all().
@@ -183,4 +196,36 @@ func (v *Widget) SetMarginEnd(margin int) {
 func (v *Widget) GetMarginEnd() int {
 	c := C.gtk_widget_get_margin_end(v.native())
 	return int(c)
+}
+
+// SetSensitive is a wrapper around gtk_widget_set_sensitive().
+func (v *Widget) SetSensitive(sensitive bool) {
+	C.gtk_widget_set_sensitive(v.native(), gbool(sensitive))
+}
+
+// GetVisible is a wrapper around gtk_widget_get_visible().
+func (v *Widget) GetVisible() bool {
+	c := C.gtk_widget_get_visible(v.native())
+	return gobool(c)
+}
+
+func fromNativeStyleContext(c *C.GtkStyleContext) *StyleContext {
+	if c == nil {
+		return nil
+	}
+
+	obj := glib.WrapObject(unsafe.Pointer(c))
+	return wrapStyleContext(obj)
+}
+
+// GetStyleContext is a wrapper around gtk_widget_get_style_context().
+func (v *Widget) GetStyleContext() *StyleContext {
+	return fromNativeStyleContext(C.gtk_widget_get_style_context(v.native()))
+}
+
+// GetWindow is a wrapper around gtk_widget_get_window().
+func (v *Widget) GetWindow() *gdk.Window {
+	c := C.gtk_widget_get_window(v.native())
+	w := &gdk.Window{glib.WrapObject(unsafe.Pointer(c))}
+	return w
 }

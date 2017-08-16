@@ -17,10 +17,15 @@ type Object struct {
 
 // WrapObject creates a new Object from a GObject pointer.
 func WrapObject(p unsafe.Pointer) *Object {
+	if p == nil {
+		return nil
+	}
 	obj := &Object{GObject: (*C.GObject)(p)}
 
 	if C.g_object_is_floating(C.gpointer(obj.GObject)) != 0 {
 		C.g_object_ref_sink(C.gpointer(obj.GObject))
+	} else {
+		C.g_object_ref(C.gpointer(obj.GObject))
 	}
 
 	runtime.SetFinalizer(obj, finalizeObject)
@@ -33,32 +38,14 @@ func finalizeObject(obj *Object) {
 }
 
 func NewObject(gType Type) *Object {
-	return WrapObject(unsafe.Pointer(C._g_object_new(C.GType(gType))))
+	gObj := C._g_object_new(C.GType(gType))
+	obj := WrapObject(unsafe.Pointer(gObj))
+	C.g_object_unref(C.gpointer(gObj))
+	return obj
 }
 
-// Ref is a wrapper around g_object_ref().
-func (v *Object) Ref() {
-	if v == nil {
-		return
-	}
-	C.g_object_ref(C.gpointer(v.GObject))
-}
-
-// Unref is a wrapper around g_object_unref().
-func (v *Object) Unref() {
-	if v == nil {
-		return
-	}
-	C.g_object_unref(C.gpointer(v.GObject))
-}
-
-// IsFloating is a wrapper around g_object_is_floating().
-func (v *Object) IsFloating() bool {
-	if v == nil {
-		return false
-	}
-	c := C.g_object_is_floating(C.gpointer(v.GObject))
-	return c != 0
+func (v *Object) Native() unsafe.Pointer {
+	return unsafe.Pointer(v.GObject)
 }
 
 // StopEmission is a wrapper around g_signal_stop_emission_by_name().
@@ -120,7 +107,7 @@ func (v *Object) SetProperty(name string, value interface{}) {
 	}
 }
 
-func (v *Object) connectClosure(after bool, detailedSignal string, f func()) (SignalHandle, error) {
+func (v *Object) connectClosure(after bool, detailedSignal string, f interface{}) (SignalHandle, error) {
 	cstr := C.CString(detailedSignal)
 	defer C.free(unsafe.Pointer(cstr))
 

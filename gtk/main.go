@@ -3,7 +3,11 @@ package gtk
 // #cgo pkg-config: gtk+-3.0
 // #include "main.go.h"
 import "C"
-import "unsafe"
+import (
+	"unsafe"
+
+	"github.com/untoldwind/amintk/gdk"
+)
 
 func gbool(b bool) C.gboolean {
 	if b {
@@ -75,4 +79,8 @@ func EventsPending() bool {
 // the GTK main loop (started by Main()).
 func MainQuit() {
 	C.gtk_main_quit()
+}
+
+func CurrentEvent() *gdk.Event {
+	return gdk.WrapEvent(unsafe.Pointer(C.gtk_get_current_event()))
 }

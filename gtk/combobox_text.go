@@ -48,3 +48,8 @@ func (v *ComboBoxText) PrependText(text string) {
 	defer C.free(unsafe.Pointer(cstr))
 	C.gtk_combo_box_text_prepend_text(v.native(), (*C.gchar)(cstr))
 }
+
+// RemoveAll is a wrapper around gtk_combo_box_text_remove_all().
+func (v *ComboBoxText) RemoveAll() {
+	C.gtk_combo_box_text_remove_all(v.native())
+}

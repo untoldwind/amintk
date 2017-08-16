@@ -65,3 +65,8 @@ func (v *Label) SetPattern(patern string) {
 	defer C.free(unsafe.Pointer(cstr))
 	C.gtk_label_set_pattern(v.native(), (*C.gchar)(cstr))
 }
+
+// SetSelectable is a wrapper around gtk_label_set_selectable().
+func (v *Label) SetSelectable(setting bool) {
+	C.gtk_label_set_selectable(v.native(), gbool(setting))
+}

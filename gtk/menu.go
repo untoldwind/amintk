@@ -7,6 +7,7 @@ import "C"
 import (
 	"unsafe"
 
+	"github.com/untoldwind/amintk/gdk"
 	"github.com/untoldwind/amintk/glib"
 )
 
@@ -41,4 +42,10 @@ func MenuNew() *Menu {
 
 func wrapMenu(obj *glib.Object) *Menu {
 	return &Menu{MenuShell{Container{Widget{glib.InitiallyUnowned{Object: obj}}}}}
+}
+
+// PopupAtPointer is a wrapper for gtk_menu_popup_at_pointer(), on older versions it uses PopupAtMouseCursor
+func (v *Menu) PopupAtPointer(triggerEvent *gdk.Event) {
+	e := (*C.GdkEvent)(triggerEvent.Native())
+	C.gtk_menu_popup_at_pointer(v.native(), e)
 }

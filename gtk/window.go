@@ -5,6 +5,7 @@ package gtk
 // #include <gtk/gtk.h>
 import "C"
 import (
+	"errors"
 	"unsafe"
 
 	"github.com/untoldwind/amintk/glib"
@@ -90,4 +91,18 @@ func (v *Window) GetDefaultSize() (width, height int) {
 	var w, h C.gint
 	C.gtk_window_get_default_size(v.native(), &w, &h)
 	return int(w), int(h)
+}
+
+func (v *Window) ShowUri(uri string) error {
+	cstr := C.CString(uri)
+	defer C.free(unsafe.Pointer(cstr))
+
+	var gErr *C.GError
+
+	res := C.gtk_show_uri_on_window(v.native(), cstr, C.gtk_get_current_event_time(), &gErr)
+	if res == 0 {
+		defer C.g_error_free(gErr)
+		return errors.New(C.GoString((*C.char)(gErr.message)))
+	}
+	return nil
 }
