@@ -17,11 +17,10 @@ type TextView struct {
 
 // native returns a pointer to the underlying GtkTextView.
 func (v *TextView) native() *C.GtkTextView {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkTextView)(p)
+	return (*C.GtkTextView)(v.Native())
 }
 
 // TextViewNew is a wrapper around gtk_text_view_new().

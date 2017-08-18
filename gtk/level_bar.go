@@ -16,11 +16,10 @@ type LevelBar struct {
 
 // native returns a pointer to the underlying GtkLevelBar.
 func (v *LevelBar) native() *C.GtkLevelBar {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkLevelBar)(p)
+	return (*C.GtkLevelBar)(v.Native())
 }
 
 // LevelBarNew is a wrapper around gtk_level_bar_new().

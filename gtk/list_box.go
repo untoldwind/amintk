@@ -27,11 +27,10 @@ type ListBox struct {
 
 // native returns a pointer to the underlying GtkListBox.
 func (v *ListBox) native() *C.GtkListBox {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkListBox)(p)
+	return (*C.GtkListBox)(v.Native())
 }
 
 // ListBoxNew is a wrapper around gtk_list_box_new().

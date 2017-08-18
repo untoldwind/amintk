@@ -17,11 +17,10 @@ type SpinButton struct {
 
 // native returns a pointer to the underlying GtkSpinButton.
 func (v *SpinButton) native() *C.GtkSpinButton {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkSpinButton)(p)
+	return (*C.GtkSpinButton)(v.Native())
 }
 
 // SpinButtonNewWithRange() is a wrapper around

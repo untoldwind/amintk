@@ -45,6 +45,9 @@ func NewObject(gType Type) *Object {
 }
 
 func (v *Object) Native() unsafe.Pointer {
+	if v == nil || v.GObject == nil {
+		return nil
+	}
 	return unsafe.Pointer(v.GObject)
 }
 

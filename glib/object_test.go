@@ -10,7 +10,13 @@ import (
 )
 
 func TestObject(t *testing.T) {
+	require := require.New(t)
+
 	createViewerFile(t)
+
+	var nilObject *glib.Object = nil
+
+	require.True(nilObject.Native() == nil)
 
 	runtime.GC()
 }

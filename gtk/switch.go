@@ -17,11 +17,10 @@ type Switch struct {
 
 // native returns a pointer to the underlying GtkSwitch.
 func (v *Switch) native() *C.GtkSwitch {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkSwitch)(p)
+	return (*C.GtkSwitch)(v.Native())
 }
 
 // SwitchNew is a wrapper around gtk_switch_new().

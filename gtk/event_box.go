@@ -17,11 +17,10 @@ type EventBox struct {
 
 // native returns a pointer to the underlying GtkEventBox.
 func (v *EventBox) native() *C.GtkEventBox {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkEventBox)(p)
+	return (*C.GtkEventBox)(v.Native())
 }
 
 // EventBoxNew is a wrapper around gtk_event_box_new().

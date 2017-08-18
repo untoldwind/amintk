@@ -17,11 +17,10 @@ type ListBoxRow struct {
 
 // native returns a pointer to the underlying GtkListBoxRow.
 func (v *ListBoxRow) native() *C.GtkListBoxRow {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkListBoxRow)(p)
+	return (*C.GtkListBoxRow)(v.Native())
 }
 
 func ListBoxRowNew() *ListBoxRow {

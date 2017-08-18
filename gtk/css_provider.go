@@ -22,11 +22,10 @@ type IStyleProvider interface {
 
 // native returns a pointer to the underlying GtkCssProvider.
 func (v *CssProvider) native() *C.GtkCssProvider {
-	if v == nil || v.Object == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkCssProvider)(p)
+	return (*C.GtkCssProvider)(v.Native())
 }
 
 func (v *CssProvider) toStyleProvider() *C.GtkStyleProvider {

@@ -15,11 +15,10 @@ type Popover struct {
 }
 
 func (v *Popover) native() *C.GtkPopover {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkPopover)(p)
+	return (*C.GtkPopover)(v.Native())
 }
 
 func PopoverNew(relative IWidget) *Popover {

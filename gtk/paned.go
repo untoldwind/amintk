@@ -17,11 +17,10 @@ type Paned struct {
 
 // native returns a pointer to the underlying GtkPaned.
 func (v *Paned) native() *C.GtkPaned {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkPaned)(p)
+	return (*C.GtkPaned)(v.Native())
 }
 
 // PanedNew is a wrapper around gtk_paned_new().

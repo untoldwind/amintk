@@ -17,11 +17,10 @@ type TextBuffer struct {
 
 // native returns a pointer to the underlying GtkTextBuffer.
 func (v *TextBuffer) native() *C.GtkTextBuffer {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkTextBuffer)(p)
+	return (*C.GtkTextBuffer)(v.Native())
 }
 
 func wrapTextBuffer(obj *glib.Object) *TextBuffer {

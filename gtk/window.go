@@ -26,11 +26,10 @@ type Window struct {
 
 // native returns a pointer to the underlying GtkWindow.
 func (v *Window) native() *C.GtkWindow {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkWindow)(p)
+	return (*C.GtkWindow)(v.Native())
 }
 
 // WindowNew is a wrapper around gtk_window_new().

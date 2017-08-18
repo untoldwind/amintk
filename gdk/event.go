@@ -15,11 +15,17 @@ type Event struct {
 
 // native returns a pointer to the underlying GdkEvent.
 func (v *Event) native() *C.GdkEvent {
+	if v == nil {
+		return nil
+	}
 	return v.GdkEvent
 }
 
 // Native returns a pointer to the underlying GdkEvent.
 func (v *Event) Native() unsafe.Pointer {
+	if v == nil {
+		return nil
+	}
 	return unsafe.Pointer(v.native())
 }
 

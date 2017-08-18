@@ -17,11 +17,10 @@ type ComboBoxText struct {
 
 // native returns a pointer to the underlying GtkComboBoxText.
 func (v *ComboBoxText) native() *C.GtkComboBoxText {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkComboBoxText)(p)
+	return (*C.GtkComboBoxText)(v.Native())
 }
 
 // ComboBoxTextNew is a wrapper around gtk_combo_box_text_new().

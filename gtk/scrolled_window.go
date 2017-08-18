@@ -26,11 +26,10 @@ type ScrolledWindow struct {
 
 // native returns a pointer to the underlying GtkScrolledWindow.
 func (v *ScrolledWindow) native() *C.GtkScrolledWindow {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkScrolledWindow)(p)
+	return (*C.GtkScrolledWindow)(v.Native())
 }
 
 // ScrolledWindowNew() is a wrapper around gtk_scrolled_window_new().

@@ -18,11 +18,10 @@ type Grid struct {
 
 // native returns a pointer to the underlying GtkGrid.
 func (v *Grid) native() *C.GtkGrid {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkGrid)(p)
+	return (*C.GtkGrid)(v.Native())
 }
 
 // GridNew is a wrapper around gtk_grid_new().

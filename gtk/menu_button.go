@@ -28,11 +28,10 @@ type MenuButton struct {
 
 // native() returns a pointer to the underlying GtkButton.
 func (v *MenuButton) native() *C.GtkMenuButton {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkMenuButton)(p)
+	return (*C.GtkMenuButton)(v.Native())
 }
 
 // MenuButtonNew is a wrapper around gtk_menu_button_new().

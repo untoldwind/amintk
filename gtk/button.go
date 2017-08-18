@@ -17,11 +17,10 @@ type Button struct {
 
 // native() returns a pointer to the underlying GtkButton.
 func (v *Button) native() *C.GtkButton {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkButton)(p)
+	return (*C.GtkButton)(v.Native())
 }
 
 // ButtonNew is a wrapper around gtk_button_new().
@@ -85,6 +84,5 @@ func (v *Button) SetImage(image IWidget) {
 // GetImage is a wrapper around gtk_button_get_image().
 func (v *Button) GetImage() *Widget {
 	c := C.gtk_button_get_image(v.native())
-	obj := glib.WrapObject(unsafe.Pointer(c))
-	return wrapWidget(obj)
+	return wrapWidget(unsafe.Pointer(c))
 }

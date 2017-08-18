@@ -17,11 +17,10 @@ type Label struct {
 
 // native returns a pointer to the underlying GtkLabel.
 func (v *Label) native() *C.GtkLabel {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkLabel)(p)
+	return (*C.GtkLabel)(v.Native())
 }
 
 // LabelNew is a wrapper around gtk_label_new().

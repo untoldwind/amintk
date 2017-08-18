@@ -18,11 +18,10 @@ type Clipboard struct {
 
 // native returns a pointer to the underlying GtkClipboard.
 func (v *Clipboard) native() *C.GtkClipboard {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkClipboard)(p)
+	return (*C.GtkClipboard)(v.Native())
 }
 
 // ClipboardGet is a wrapper around gtk_clipboard_get().

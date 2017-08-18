@@ -15,6 +15,9 @@ type TextIter C.GtkTextIter
 
 // native returns a pointer to the underlying GtkTextIter.
 func (v *TextIter) native() *C.GtkTextIter {
+	if v == nil {
+		return nil
+	}
 	return (*C.GtkTextIter)(v)
 }
 

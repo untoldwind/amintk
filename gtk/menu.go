@@ -23,11 +23,10 @@ type IMenu interface {
 
 // native() returns a pointer to the underlying GtkMenu.
 func (v *Menu) native() *C.GtkMenu {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkMenu)(p)
+	return (*C.GtkMenu)(v.Native())
 }
 
 func (v *Menu) toMenu() *C.GtkMenu {

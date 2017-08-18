@@ -17,11 +17,10 @@ type Display struct {
 
 // native returns a pointer to the underlying GtkComboBox.
 func (v *Display) native() *C.GdkDisplay {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GdkDisplay)(p)
+	return (*C.GdkDisplay)(v.Native())
 }
 
 // DisplayGetDefault is a wrapper around gdk_display_get_default().

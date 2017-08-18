@@ -26,12 +26,10 @@ type InfoBar struct {
 }
 
 func (v *InfoBar) native() *C.GtkInfoBar {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkInfoBar)(p)
+	return (*C.GtkInfoBar)(v.Native())
 }
 
 func InfoBarNew() *InfoBar {
@@ -66,7 +64,7 @@ func (v *InfoBar) GetContentArea() *Box {
 	if c == nil {
 		return nil
 	}
-	return wrapBox(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapBox(unsafe.Pointer(c))
 }
 
 func (v *InfoBar) GetActionArea() *Widget {
@@ -74,5 +72,5 @@ func (v *InfoBar) GetActionArea() *Widget {
 	if c == nil {
 		return nil
 	}
-	return wrapWidget(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapWidget(unsafe.Pointer(c))
 }

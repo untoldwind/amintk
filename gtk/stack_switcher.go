@@ -17,11 +17,10 @@ type StackSwitcher struct {
 
 // native returns a pointer to the underlying GtkStackSwitcher.
 func (v *StackSwitcher) native() *C.GtkStackSwitcher {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkStackSwitcher)(p)
+	return (*C.GtkStackSwitcher)(v.Native())
 }
 
 // StackSwitcherNew is a wrapper around gtk_stack_switcher_new().

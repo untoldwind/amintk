@@ -17,11 +17,10 @@ type Overlay struct {
 
 // native returns a pointer to the underlying GtkOverlay.
 func (v *Overlay) native() *C.GtkOverlay {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkOverlay)(p)
+	return (*C.GtkOverlay)(v.Native())
 }
 
 // OverlayNew() is a wrapper around gtk_overlay_new().

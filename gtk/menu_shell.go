@@ -4,7 +4,6 @@ package gtk
 // #include <stdlib.h>
 // #include <gtk/gtk.h>
 import "C"
-import "unsafe"
 
 // MenuShell is a representation of GTK's GtkMenuShell.
 type MenuShell struct {
@@ -13,11 +12,10 @@ type MenuShell struct {
 
 // native returns a pointer to the underlying GtkMenuShell.
 func (v *MenuShell) native() *C.GtkMenuShell {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkMenuShell)(p)
+	return (*C.GtkMenuShell)(v.Native())
 }
 
 // Append is a wrapper around gtk_menu_shell_append().

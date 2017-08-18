@@ -33,11 +33,10 @@ type Entry struct {
 
 // native returns a pointer to the underlying GtkEntry.
 func (v *Entry) native() *C.GtkEntry {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkEntry)(p)
+	return (*C.GtkEntry)(v.Native())
 }
 
 // EntryNew is a wrapper around gtk_entry_new().

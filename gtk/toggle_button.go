@@ -17,11 +17,10 @@ type ToggleButton struct {
 
 // native returns a pointer to the underlying GtkToggleButton.
 func (v *ToggleButton) native() *C.GtkToggleButton {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkToggleButton)(p)
+	return (*C.GtkToggleButton)(v.Native())
 }
 
 // ToggleButtonNew is a wrapper around gtk_toggle_button_new().

@@ -17,11 +17,10 @@ type Stack struct {
 
 // native returns a pointer to the underlying GtkStack.
 func (v *Stack) native() *C.GtkStack {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkStack)(p)
+	return (*C.GtkStack)(v.Native())
 }
 
 // StackNew is a wrapper around gtk_stack_new().
@@ -62,7 +61,7 @@ func (v *Stack) GetVisibleChild() *Widget {
 	if c == nil {
 		return nil
 	}
-	return wrapWidget(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapWidget(unsafe.Pointer(c))
 }
 
 // SetVisibleChildName is a wrapper around gtk_stack_set_visible_child_name().

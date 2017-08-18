@@ -17,11 +17,10 @@ type SearchEntry struct {
 
 // native returns a pointer to the underlying GtkSearchEntry.
 func (v *SearchEntry) native() *C.GtkSearchEntry {
-	if v == nil || v.GObject == nil {
+	if v == nil {
 		return nil
 	}
-	p := unsafe.Pointer(v.GObject)
-	return (*C.GtkSearchEntry)(p)
+	return (*C.GtkSearchEntry)(v.Native())
 }
 
 // SearchEntryNew is a wrapper around gtk_search_entry_new().

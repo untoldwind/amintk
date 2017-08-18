@@ -1,7 +1,7 @@
 PKGS = ./fixtures/... ./glib/... ./gdk/... ./gtk/...
 
 all: export GOPATH=${PWD}/../../../..
-all:
+all: format
 	@echo "--> Build"
 	@go build -i ${PKGS}
 
