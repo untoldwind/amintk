@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // MessageType is a representation of GTK's GtkMessageType.
@@ -34,11 +32,14 @@ func (v *InfoBar) native() *C.GtkInfoBar {
 
 func InfoBarNew() *InfoBar {
 	c := C.gtk_info_bar_new()
-	return wrapInfoBar(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapInfoBar(unsafe.Pointer(c))
 }
 
-func wrapInfoBar(obj *glib.Object) *InfoBar {
-	return &InfoBar{Box{Container{Widget{glib.InitiallyUnowned{Object: obj}}}}}
+func wrapInfoBar(p unsafe.Pointer) *InfoBar {
+	if box := wrapBox(p); box != nil {
+		return &InfoBar{Box: *box}
+	}
+	return nil
 }
 
 func (v *InfoBar) SetMessageType(messageType MessageType) {

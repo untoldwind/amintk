@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // TextView is a representation of GTK's GtkTextView
@@ -26,17 +24,20 @@ func (v *TextView) native() *C.GtkTextView {
 // TextViewNew is a wrapper around gtk_text_view_new().
 func TextViewNew() *TextView {
 	c := C.gtk_text_view_new()
-	return wrapTextView(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapTextView(unsafe.Pointer(c))
 }
 
-func wrapTextView(obj *glib.Object) *TextView {
-	return &TextView{Container{Widget{glib.InitiallyUnowned{Object: obj}}}}
+func wrapTextView(p unsafe.Pointer) *TextView {
+	if container := wrapContainer(p); container != nil {
+		return &TextView{Container: *container}
+	}
+	return nil
 }
 
 // GetBuffer is a wrapper around gtk_text_view_get_buffer().
 func (v *TextView) GetBuffer() *TextBuffer {
 	c := C.gtk_text_view_get_buffer(v.native())
-	return wrapTextBuffer(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapTextBuffer(unsafe.Pointer(c))
 }
 
 // SetBuffer is a wrapper around gtk_text_view_set_buffer().

@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // Switch is a representation of GTK's GtkSwitch.
@@ -26,11 +24,14 @@ func (v *Switch) native() *C.GtkSwitch {
 // SwitchNew is a wrapper around gtk_switch_new().
 func SwitchNew() *Switch {
 	c := C.gtk_switch_new()
-	return wrapSwitch(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapSwitch(unsafe.Pointer(c))
 }
 
-func wrapSwitch(obj *glib.Object) *Switch {
-	return &Switch{Widget{glib.InitiallyUnowned{Object: obj}}}
+func wrapSwitch(p unsafe.Pointer) *Switch {
+	if widget := wrapWidget(p); widget != nil {
+		return &Switch{Widget: *widget}
+	}
+	return nil
 }
 
 // GetActive is a wrapper around gtk_switch_get_active().

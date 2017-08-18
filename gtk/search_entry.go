@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // SearchEntry is a reprensentation of GTK's GtkSearchEntry.
@@ -26,9 +24,12 @@ func (v *SearchEntry) native() *C.GtkSearchEntry {
 // SearchEntryNew is a wrapper around gtk_search_entry_new().
 func SearchEntryNew() *SearchEntry {
 	c := C.gtk_search_entry_new()
-	return wrapSearchEntry(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapSearchEntry(unsafe.Pointer(c))
 }
 
-func wrapSearchEntry(obj *glib.Object) *SearchEntry {
-	return &SearchEntry{Entry{Widget{glib.InitiallyUnowned{Object: obj}}}}
+func wrapSearchEntry(p unsafe.Pointer) *SearchEntry {
+	if entry := wrapEntry(p); entry != nil {
+		return &SearchEntry{Entry: *entry}
+	}
+	return nil
 }

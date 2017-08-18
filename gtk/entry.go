@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // InputPurpose is a representation of GTK's GtkInputPurpose.
@@ -42,12 +40,14 @@ func (v *Entry) native() *C.GtkEntry {
 // EntryNew is a wrapper around gtk_entry_new().
 func EntryNew() *Entry {
 	c := C.gtk_entry_new()
-	obj := glib.WrapObject(unsafe.Pointer(c))
-	return wrapEntry(obj)
+	return wrapEntry(unsafe.Pointer(c))
 }
 
-func wrapEntry(obj *glib.Object) *Entry {
-	return &Entry{Widget{glib.InitiallyUnowned{Object: obj}}}
+func wrapEntry(p unsafe.Pointer) *Entry {
+	if widget := wrapWidget(p); widget != nil {
+		return &Entry{Widget: *widget}
+	}
+	return nil
 }
 
 // SetInputPurpose is a wrapper around gtk_entry_set_input_purpose().

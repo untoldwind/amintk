@@ -5,6 +5,8 @@ package gdk
 // #include <gdk/gdk.h>
 import "C"
 import (
+	"unsafe"
+
 	"github.com/untoldwind/amintk/glib"
 )
 
@@ -19,6 +21,13 @@ func (v *Window) native() *C.GdkWindow {
 		return nil
 	}
 	return (*C.GdkWindow)(v.Native())
+}
+
+func WrapWindow(p unsafe.Pointer) *Window {
+	if obj := glib.WrapObject(p); obj != nil {
+		return &Window{Object: obj}
+	}
+	return nil
 }
 
 func (v *Window) SetCursor(cursor *Cursor) {

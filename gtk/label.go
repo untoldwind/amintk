@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // Label is a representation of GTK's GtkLabel.
@@ -28,12 +26,14 @@ func LabelNew(str string) *Label {
 	cstr := C.CString(str)
 	defer C.free(unsafe.Pointer(cstr))
 	c := C.gtk_label_new((*C.gchar)(cstr))
-	obj := glib.WrapObject(unsafe.Pointer(c))
-	return wrapLabel(obj)
+	return wrapLabel(unsafe.Pointer(c))
 }
 
-func wrapLabel(obj *glib.Object) *Label {
-	return &Label{Widget{glib.InitiallyUnowned{Object: obj}}}
+func wrapLabel(p unsafe.Pointer) *Label {
+	if widget := wrapWidget(p); widget != nil {
+		return &Label{Widget: *widget}
+	}
+	return nil
 }
 
 // SetText is a wrapper around gtk_label_set_text().

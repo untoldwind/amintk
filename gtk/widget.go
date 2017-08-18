@@ -228,6 +228,5 @@ func (v *Widget) GetStyleContext() *StyleContext {
 // GetWindow is a wrapper around gtk_widget_get_window().
 func (v *Widget) GetWindow() *gdk.Window {
 	c := C.gtk_widget_get_window(v.native())
-	w := &gdk.Window{glib.WrapObject(unsafe.Pointer(c))}
-	return w
+	return gdk.WrapWindow(unsafe.Pointer(c))
 }

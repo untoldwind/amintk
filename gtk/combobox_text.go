@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // ComboBoxText is a representation of GTK's GtkComboBoxText.
@@ -26,12 +24,14 @@ func (v *ComboBoxText) native() *C.GtkComboBoxText {
 // ComboBoxTextNew is a wrapper around gtk_combo_box_text_new().
 func ComboBoxTextNew() *ComboBoxText {
 	c := C.gtk_combo_box_text_new()
-	obj := glib.WrapObject(unsafe.Pointer(c))
-	return wrapComboBoxText(obj)
+	return wrapComboBoxText(unsafe.Pointer(c))
 }
 
-func wrapComboBoxText(obj *glib.Object) *ComboBoxText {
-	return &ComboBoxText{*wrapComboBox(obj)}
+func wrapComboBoxText(p unsafe.Pointer) *ComboBoxText {
+	if comboBox := wrapComboBox(p); comboBox != nil {
+		return &ComboBoxText{ComboBox: *comboBox}
+	}
+	return nil
 }
 
 // AppendText is a wrapper around gtk_combo_box_text_append_text().

@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // Stack is a representation of GTK's GtkStack.
@@ -26,11 +24,14 @@ func (v *Stack) native() *C.GtkStack {
 // StackNew is a wrapper around gtk_stack_new().
 func StackNew() *Stack {
 	c := C.gtk_stack_new()
-	return wrapStack(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapStack(unsafe.Pointer(c))
 }
 
-func wrapStack(obj *glib.Object) *Stack {
-	return &Stack{Container{Widget{glib.InitiallyUnowned{Object: obj}}}}
+func wrapStack(p unsafe.Pointer) *Stack {
+	if container := wrapContainer(p); container != nil {
+		return &Stack{Container: *container}
+	}
+	return nil
 }
 
 // AddNamed is a wrapper around gtk_stack_add_named().

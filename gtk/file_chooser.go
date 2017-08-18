@@ -20,7 +20,7 @@ const (
 	FileChooserActionCreateFolder FileChooserAction = C.GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
 )
 
-// FileChoser is a representation of GTK's GtkFileChooser GInterface.
+// FileChooser is a representation of GTK's GtkFileChooser GInterface.
 type FileChooser struct {
 	*glib.Object
 }

@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // Button is a representation of GTK's GtkButton.
@@ -26,8 +24,7 @@ func (v *Button) native() *C.GtkButton {
 // ButtonNew is a wrapper around gtk_button_new().
 func ButtonNew() *Button {
 	c := C.gtk_button_new()
-	obj := glib.WrapObject(unsafe.Pointer(c))
-	return wrapButton(obj)
+	return wrapButton(unsafe.Pointer(c))
 }
 
 // ButtonNewWithLabel is a wrapper around gtk_button_new_with_label().
@@ -35,8 +32,7 @@ func ButtonNewWithLabel(label string) *Button {
 	cstr := C.CString(label)
 	defer C.free(unsafe.Pointer(cstr))
 	c := C.gtk_button_new_with_label((*C.gchar)(cstr))
-	obj := glib.WrapObject(unsafe.Pointer(c))
-	return wrapButton(obj)
+	return wrapButton(unsafe.Pointer(c))
 }
 
 // ButtonNewFromIconName is a wrapper around gtk_button_new_from_icon_name().
@@ -45,11 +41,14 @@ func ButtonNewFromIconName(iconName string, size IconSize) *Button {
 	defer C.free(unsafe.Pointer(cstr))
 	c := C.gtk_button_new_from_icon_name((*C.gchar)(cstr),
 		C.GtkIconSize(size))
-	return wrapButton(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapButton(unsafe.Pointer(c))
 }
 
-func wrapButton(obj *glib.Object) *Button {
-	return &Button{Bin{Container{Widget{glib.InitiallyUnowned{Object: obj}}}}}
+func wrapButton(p unsafe.Pointer) *Button {
+	if bin := wrapBin(p); bin != nil {
+		return &Button{Bin: *bin}
+	}
+	return nil
 }
 
 // SetLabel is a wrapper around gtk_button_set_label().

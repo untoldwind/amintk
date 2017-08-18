@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // ListBoxRow is a representation of GTK's GtkListBoxRow.
@@ -25,11 +23,14 @@ func (v *ListBoxRow) native() *C.GtkListBoxRow {
 
 func ListBoxRowNew() *ListBoxRow {
 	c := C.gtk_list_box_row_new()
-	return wrapListBoxRow(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapListBoxRow(unsafe.Pointer(c))
 }
 
-func wrapListBoxRow(obj *glib.Object) *ListBoxRow {
-	return &ListBoxRow{Bin{Container{Widget{glib.InitiallyUnowned{Object: obj}}}}}
+func wrapListBoxRow(p unsafe.Pointer) *ListBoxRow {
+	if bin := wrapBin(p); bin != nil {
+		return &ListBoxRow{Bin: *bin}
+	}
+	return nil
 }
 
 // GetIndex is a wrapper around gtk_list_box_row_get_index()

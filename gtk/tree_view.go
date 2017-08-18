@@ -4,9 +4,7 @@ package gtk
 // #include <stdlib.h>
 // #include <gtk/gtk.h>
 import "C"
-import (
-	"github.com/untoldwind/amintk/glib"
-)
+import "unsafe"
 
 // TreeView is a representation of GTK's GtkTreeView.
 type TreeView struct {
@@ -21,6 +19,9 @@ func (v *TreeView) native() *C.GtkTreeView {
 	return (*C.GtkTreeView)(v.Native())
 }
 
-func wrapTreeView(obj *glib.Object) *TreeView {
-	return &TreeView{Container{Widget{glib.InitiallyUnowned{Object: obj}}}}
+func wrapTreeView(p unsafe.Pointer) *TreeView {
+	if container := wrapContainer(p); container != nil {
+		return &TreeView{Container: *container}
+	}
+	return nil
 }

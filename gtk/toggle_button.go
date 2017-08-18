@@ -6,8 +6,6 @@ package gtk
 import "C"
 import (
 	"unsafe"
-
-	"github.com/untoldwind/amintk/glib"
 )
 
 // ToggleButton is a representation of GTK's GtkToggleButton.
@@ -26,12 +24,14 @@ func (v *ToggleButton) native() *C.GtkToggleButton {
 // ToggleButtonNew is a wrapper around gtk_toggle_button_new().
 func ToggleButtonNew() *ToggleButton {
 	c := C.gtk_toggle_button_new()
-	return wrapToggleButton(glib.WrapObject(unsafe.Pointer(c)))
+	return wrapToggleButton(unsafe.Pointer(c))
 }
 
-func wrapToggleButton(obj *glib.Object) *ToggleButton {
-	return &ToggleButton{Button{Bin{Container{Widget{
-		glib.InitiallyUnowned{Object: obj}}}}}}
+func wrapToggleButton(p unsafe.Pointer) *ToggleButton {
+	if button := wrapButton(p); button != nil {
+		return &ToggleButton{Button: *button}
+	}
+	return nil
 }
 
 // GetActive is a wrapper around gtk_toggle_button_get_active().
