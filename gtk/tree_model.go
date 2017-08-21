@@ -33,5 +33,8 @@ func (v *TreeModel) toTreeModel() *C.GtkTreeModel {
 }
 
 func wrapTreeModel(obj *glib.Object) *TreeModel {
-	return &TreeModel{Object: obj}
+	if obj != nil {
+		return &TreeModel{Object: obj}
+	}
+	return nil
 }

@@ -19,6 +19,14 @@ type Value struct {
 	GValue *C.GValue
 }
 
+// Native returns a pointer to the underlying GValue.
+func (v *Value) Native() unsafe.Pointer {
+	if v == nil {
+		return nil
+	}
+	return unsafe.Pointer(v.GValue)
+}
+
 // ValueAlloc allocates a Value and sets a runtime finalizer to call
 // g_value_unset() on the underlying GValue after leaving scope.
 // ValueAlloc() returns a non-nil error if the allocation failed.
