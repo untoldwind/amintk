@@ -41,3 +41,23 @@ func (v *TreeSelection) GetSelected() (model ITreeModel, iter *TreeIter, ok bool
 	ok = gobool(c)
 	return
 }
+
+// CountSelectedRows() is a wrapper around gtk_tree_selection_count_selected_rows().
+func (v *TreeSelection) CountSelectedRows() int {
+	return int(C.gtk_tree_selection_count_selected_rows(v.native()))
+}
+
+// SelectIter is a wrapper around gtk_tree_selection_select_iter().
+func (v *TreeSelection) SelectIter(iter *TreeIter) {
+	C.gtk_tree_selection_select_iter(v.native(), iter.native())
+}
+
+// SetMode() is a wrapper around gtk_tree_selection_set_mode().
+func (v *TreeSelection) SetMode(m SelectionMode) {
+	C.gtk_tree_selection_set_mode(v.native(), C.GtkSelectionMode(m))
+}
+
+// GetMode() is a wrapper around gtk_tree_selection_get_mode().
+func (v *TreeSelection) GetMode() SelectionMode {
+	return SelectionMode(C.gtk_tree_selection_get_mode(v.native()))
+}

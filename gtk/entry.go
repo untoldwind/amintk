@@ -27,6 +27,7 @@ const (
 // Entry is a representation of GTK's GtkEntry.
 type Entry struct {
 	Widget
+	Editable
 }
 
 // native returns a pointer to the underlying GtkEntry.
@@ -45,7 +46,8 @@ func EntryNew() *Entry {
 
 func wrapEntry(p unsafe.Pointer) *Entry {
 	if widget := wrapWidget(p); widget != nil {
-		return &Entry{Widget: *widget}
+		e := wrapEditable(widget.Object)
+		return &Entry{Widget: *widget, Editable: *e}
 	}
 	return nil
 }

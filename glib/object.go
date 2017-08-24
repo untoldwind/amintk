@@ -51,6 +51,16 @@ func (v *Object) Native() unsafe.Pointer {
 	return unsafe.Pointer(v.GObject)
 }
 
+// Ref is a wrapper around g_object_ref().
+func (v *Object) Ref() {
+	C.g_object_ref(C.gpointer(v.GObject))
+}
+
+// Unref is a wrapper around g_object_unref().
+func (v *Object) Unref() {
+	C.g_object_unref(C.gpointer(v.GObject))
+}
+
 // StopEmission is a wrapper around g_signal_stop_emission_by_name().
 func (v *Object) StopEmission(s string) {
 	if v == nil {

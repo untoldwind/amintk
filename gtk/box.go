@@ -13,7 +13,7 @@ type Box struct {
 	Container
 }
 
-// native() returns a pointer to the underlying GtkBox.
+// native returns a pointer to the underlying GtkBox.
 func (v *Box) native() *C.GtkBox {
 	if v == nil {
 		return nil

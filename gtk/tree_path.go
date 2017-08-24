@@ -26,6 +26,15 @@ func (v *TreePath) free() {
 	C.gtk_tree_path_free(v.native())
 }
 
+func wrapTreePath(c *C.GtkTreePath) *TreePath {
+	if c == nil {
+		return nil
+	}
+	t := &TreePath{c}
+	runtime.SetFinalizer(t, (*TreePath).free)
+	return t
+}
+
 // GetIndices is a wrapper around gtk_tree_path_get_indices_with_depth
 func (v *TreePath) GetIndices() []int {
 	var depth C.gint
@@ -52,10 +61,5 @@ func TreePathNewFromString(path string) *TreePath {
 	cstr := C.CString(path)
 	defer C.free(unsafe.Pointer(cstr))
 	c := C.gtk_tree_path_new_from_string((*C.gchar)(cstr))
-	if c == nil {
-		return nil
-	}
-	t := &TreePath{c}
-	runtime.SetFinalizer(t, (*TreePath).free)
-	return t
+	return wrapTreePath(c)
 }
