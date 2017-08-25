@@ -6,6 +6,8 @@ package gtk
 import "C"
 import (
 	"unsafe"
+
+	"github.com/untoldwind/amintk/glib"
 )
 
 // MessageType is a representation of GTK's GtkMessageType.
@@ -74,4 +76,16 @@ func (v *InfoBar) GetActionArea() *Widget {
 		return nil
 	}
 	return wrapWidget(unsafe.Pointer(c))
+}
+
+func (v *InfoBar) OnClose(callback func()) {
+	if v != nil {
+		v.Connect("close", glib.CallbackVoidVoid(callback))
+	}
+}
+
+func (v *InfoBar) OnResponse(callback func(responseId int)) {
+	if v != nil {
+		v.Connect("close", glib.CallbackIntVoid(callback))
+	}
 }

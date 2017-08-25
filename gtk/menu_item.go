@@ -66,3 +66,9 @@ func (v *MenuItem) GetLabel() string {
 	l := C.gtk_menu_item_get_label(v.native())
 	return C.GoString((*C.char)(l))
 }
+
+func (v *MenuItem) OnActivate(callback func()) {
+	if v != nil {
+		v.Connect("activate", glib.CallbackVoidVoid(callback))
+	}
+}

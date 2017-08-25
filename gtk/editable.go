@@ -109,3 +109,9 @@ func (v *Editable) GetEditable() bool {
 	c := C.gtk_editable_get_editable(v.native())
 	return gobool(c)
 }
+
+func (v *Widget) OnChanged(callback func()) {
+	if v != nil {
+		v.ConnectAfter("changed", glib.CallbackVoidVoid(callback))
+	}
+}

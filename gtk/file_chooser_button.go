@@ -6,6 +6,8 @@ package gtk
 import "C"
 import (
 	"unsafe"
+
+	"github.com/untoldwind/amintk/glib"
 )
 
 // FileChooserButton is a representation of GTK's GtkFileChooserButton.
@@ -38,4 +40,10 @@ func wrapFileChooserButton(p unsafe.Pointer) *FileChooserButton {
 		return &FileChooserButton{Box: *box, FileChooser: *fc}
 	}
 	return nil
+}
+
+func (v *FileChooserButton) OnFileSet(callback func()) {
+	if v != nil {
+		v.Connect("file-set", glib.CallbackVoidVoid(callback))
+	}
 }

@@ -230,3 +230,33 @@ func (v *Widget) GetWindow() *gdk.Window {
 	c := C.gtk_widget_get_window(v.native())
 	return gdk.WrapWindow(unsafe.Pointer(c))
 }
+
+func (v *Widget) OnDestroy(callback func()) {
+	if v != nil {
+		v.Connect("destroy", glib.CallbackVoidVoid(callback))
+	}
+}
+
+func (v *Widget) OnAfterShow(callback func()) {
+	if v != nil {
+		v.ConnectAfter("show", glib.CallbackVoidVoid(callback))
+	}
+}
+
+func (v *Widget) OnAfterRealize(callback func()) {
+	if v != nil {
+		v.ConnectAfter("realize", glib.CallbackVoidVoid(callback))
+	}
+}
+
+func (v *Widget) OnPopupMenu(callback func()) {
+	if v != nil {
+		v.ConnectAfter("popup-menu", glib.CallbackVoidVoid(callback))
+	}
+}
+
+func (v *Widget) OnButtonPressEvent(callback func(*gdk.Event) bool) {
+	if v != nil {
+		v.Connect("button-press-event", gdk.CallbackEventBoolean(callback))
+	}
+}

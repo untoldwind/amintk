@@ -6,6 +6,8 @@ package gtk
 import "C"
 import (
 	"unsafe"
+
+	"github.com/untoldwind/amintk/glib"
 )
 
 // Button is a representation of GTK's GtkButton.
@@ -84,4 +86,10 @@ func (v *Button) SetImage(image IWidget) {
 func (v *Button) GetImage() *Widget {
 	c := C.gtk_button_get_image(v.native())
 	return wrapWidget(unsafe.Pointer(c))
+}
+
+func (v *Button) OnClicked(callback func()) {
+	if v != nil {
+		v.Connect("clicked", glib.CallbackVoidVoid(callback))
+	}
 }

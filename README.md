@@ -16,3 +16,9 @@ and actually has a lot of code in common. There are some major differences thoug
   registering all marshallers, which in turn creates a dependency to literally everything.
   Therefore all the widget bindings are linked even if you do not need them, which creates
   rather large executables.
+* Signals: To avoid the necessity of a global marshaller list, all signals should be bound
+  via the `On<CamelCase>` rather the `Connect("<snake-case>")` functions. This removed a
+  lot of magic strings and makes signal binding a bit more type safe. The drawback is
+  that signal callbacks/closures do not support userdata any more - but with go one
+  usually do not need those anyway.
+   

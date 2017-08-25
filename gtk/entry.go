@@ -6,6 +6,8 @@ package gtk
 import "C"
 import (
 	"unsafe"
+
+	"github.com/untoldwind/amintk/glib"
 )
 
 // InputPurpose is a representation of GTK's GtkInputPurpose.
@@ -90,4 +92,10 @@ func (v *Entry) SetVisibility(visible bool) {
 func (v *Entry) GetVisibility() bool {
 	c := C.gtk_entry_get_visibility(v.native())
 	return gobool(c)
+}
+
+func (v *Entry) OnActivate(callback func()) {
+	if v != nil {
+		v.Connect("activate", glib.CallbackVoidVoid(callback))
+	}
 }

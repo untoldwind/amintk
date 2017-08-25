@@ -55,3 +55,9 @@ func (v *ListBox) GetSelectedRow() *ListBoxRow {
 	c := C.gtk_list_box_get_selected_row(v.native())
 	return wrapListBoxRow(unsafe.Pointer(c))
 }
+
+func (v *ListBox) OnAfterRowSelected(callback func(*ListBoxRow)) {
+	if v != nil {
+		v.ConnectAfter("row-selected", CallbackListBoxRowVoid(callback))
+	}
+}

@@ -6,6 +6,8 @@ package gtk
 import "C"
 import (
 	"unsafe"
+
+	"github.com/untoldwind/amintk/glib"
 )
 
 // SearchEntry is a reprensentation of GTK's GtkSearchEntry.
@@ -32,4 +34,10 @@ func wrapSearchEntry(p unsafe.Pointer) *SearchEntry {
 		return &SearchEntry{Entry: *entry}
 	}
 	return nil
+}
+
+func (v *Widget) OnSearchChanged(callback func()) {
+	if v != nil {
+		v.ConnectAfter("search-changed", glib.CallbackVoidVoid(callback))
+	}
 }

@@ -185,26 +185,6 @@ func (v *Value) Type() (actual Type, fundamental Type) {
 	return Type(cActual), Type(cFundamental)
 }
 
-// GoValue converts a Value to comparable Go type.  GoValue()
-// returns a non-nil error if the conversion was unsuccessful.  The
-// returned interface{} must be type asserted as the actual Go
-// representation of the Value.
-//
-// This function is a wrapper around the many g_value_get_*()
-// functions, depending on the type of the Value.
-func (v *Value) GoValue() interface{} {
-	if v == nil {
-		return nil
-	}
-	f := gValueMarshalers.lookup(v)
-	if f == nil {
-		return nil
-	}
-
-	//No need to add finalizer because it is already done by ValueAlloc and ValueInit
-	return f(unsafe.Pointer(v.GValue))
-}
-
 // SetBool is a wrapper around g_value_set_boolean().
 func (v *Value) SetBool(val bool) {
 	if val {
@@ -212,6 +192,14 @@ func (v *Value) SetBool(val bool) {
 	} else {
 		C.g_value_set_boolean(v.GValue, C.gboolean(0))
 	}
+}
+
+func (v *Value) GetBool() (value bool, ok bool) {
+	if _, fundamental := v.Type(); fundamental == TYPE_BOOLEAN {
+		c := C.g_value_get_boolean(v.GValue)
+		return gobool(c), true
+	}
+	return false, false
 }
 
 // SetSChar is a wrapper around g_value_set_schar().
@@ -229,6 +217,14 @@ func (v *Value) SetInt(val int) {
 	C.g_value_set_int(v.GValue, C.gint(val))
 }
 
+func (v *Value) GetInt() (int, bool) {
+	if _, fundamental := v.Type(); fundamental == TYPE_INT {
+		c := C.g_value_get_int(v.GValue)
+		return int(c), true
+	}
+	return 0, false
+}
+
 // SetUChar is a wrapper around g_value_set_uchar().
 func (v *Value) SetUChar(val uint8) {
 	C.g_value_set_uchar(v.GValue, C.guchar(val))
@@ -242,6 +238,14 @@ func (v *Value) SetUInt64(val uint64) {
 // SetUInt is a wrapper around g_value_set_uint().
 func (v *Value) SetUInt(val uint) {
 	C.g_value_set_uint(v.GValue, C.guint(val))
+}
+
+func (v *Value) GetUInt() (uint, bool) {
+	if _, fundamental := v.Type(); fundamental == TYPE_UINT {
+		c := C.g_value_get_uint(v.GValue)
+		return uint(c), true
+	}
+	return 0, false
 }
 
 // SetFloat is a wrapper around g_value_set_float().
@@ -276,6 +280,22 @@ func (v *Value) GetPointer() unsafe.Pointer {
 	return unsafe.Pointer(C.g_value_get_pointer(v.GValue))
 }
 
+func (v *Value) GetBoxed() (unsafe.Pointer, bool) {
+	if _, fundamental := v.Type(); fundamental == TYPE_BOXED {
+		c := C.g_value_get_boxed(v.GValue)
+		return unsafe.Pointer(c), true
+	}
+	return nil, false
+}
+
+func (v *Value) GetObject() (unsafe.Pointer, bool) {
+	if _, fundamental := v.Type(); fundamental == TYPE_OBJECT {
+		c := C.g_value_get_object(v.GValue)
+		return unsafe.Pointer(c), true
+	}
+	return nil, false
+}
+
 // GetString is a wrapper around g_value_get_string().
 func (v *Value) GetString() string {
 	c := C.g_value_get_string(v.GValue)
@@ -290,4 +310,8 @@ func (v *Value) unset() {
 		return
 	}
 	C.g_value_unset(v.GValue)
+}
+
+func gobool(b C.gboolean) bool {
+	return b != C.FALSE
 }

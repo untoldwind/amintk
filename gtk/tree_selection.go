@@ -61,3 +61,9 @@ func (v *TreeSelection) SetMode(m SelectionMode) {
 func (v *TreeSelection) GetMode() SelectionMode {
 	return SelectionMode(C.gtk_tree_selection_get_mode(v.native()))
 }
+
+func (v *TreeSelection) OnChanged(callback func()) {
+	if v != nil {
+		v.Connect("changed", glib.CallbackVoidVoid(callback))
+	}
+}

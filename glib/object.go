@@ -89,7 +89,7 @@ func (v *Object) GetPropertyType(name string) Type {
 }
 
 // GetProperty is a wrapper around g_object_get_property().
-func (v *Object) GetProperty(name string) interface{} {
+func (v *Object) GetProperty(name string) *Value {
 	if v == nil {
 		return nil
 	}
@@ -103,7 +103,7 @@ func (v *Object) GetProperty(name string) interface{} {
 		return nil
 	}
 	C.g_object_get_property(v.GObject, (*C.gchar)(cstr), p.GValue)
-	return p.GoValue()
+	return p
 }
 
 // SetProperty is a wrapper around g_object_set_property().
@@ -120,22 +120,19 @@ func (v *Object) SetProperty(name string, value interface{}) {
 	}
 }
 
-func (v *Object) connectClosure(after bool, detailedSignal string, f interface{}) (SignalHandle, error) {
+func (v *Object) connectClosure(after bool, detailedSignal string, f Callback) SignalHandle {
 	cstr := C.CString(detailedSignal)
 	defer C.free(unsafe.Pointer(cstr))
 
-	closure, err := ClosureNew(f)
-	if err != nil {
-		return 0, err
-	}
+	closure := ClosureNew(f)
 	c := C.g_signal_connect_closure(C.gpointer(v.GObject), (*C.gchar)(cstr), closure, gbool(after))
-	return SignalHandle(c), nil
+	return SignalHandle(c)
 }
 
-func (v *Object) Connect(detailedSignal string, f func()) (SignalHandle, error) {
+func (v *Object) Connect(detailedSignal string, f Callback) SignalHandle {
 	return v.connectClosure(false, detailedSignal, f)
 }
 
-func (v *Object) ConnectAfter(detailedSignal string, f func()) (SignalHandle, error) {
+func (v *Object) ConnectAfter(detailedSignal string, f Callback) SignalHandle {
 	return v.connectClosure(true, detailedSignal, f)
 }
