@@ -225,6 +225,11 @@ func (v *Widget) GetStyleContext() *StyleContext {
 	return fromNativeStyleContext(C.gtk_widget_get_style_context(v.native()))
 }
 
+// SetStateFlags is a wrapper around gtk_widget_set_state_flags().
+func (v *Widget) SetStateFlags(stateFlags StateFlags, clear bool) {
+	C.gtk_widget_set_state_flags(v.native(), C.GtkStateFlags(stateFlags), gbool(clear))
+}
+
 // GetWindow is a wrapper around gtk_widget_get_window().
 func (v *Widget) GetWindow() *gdk.Window {
 	c := C.gtk_widget_get_window(v.native())
@@ -258,5 +263,23 @@ func (v *Widget) OnPopupMenu(callback func()) {
 func (v *Widget) OnButtonPressEvent(callback func(*gdk.Event) bool) {
 	if v != nil {
 		v.Connect("button-press-event", gdk.CallbackEventBoolean(callback))
+	}
+}
+
+func (v *Widget) OnButtonReleaseEvent(callback func(*gdk.Event) bool) {
+	if v != nil {
+		v.Connect("button-release-event", gdk.CallbackEventBoolean(callback))
+	}
+}
+
+func (v *Widget) OnEnterNotifyEvent(callback func(*gdk.Event) bool) {
+	if v != nil {
+		v.Connect("enter-notify-event", gdk.CallbackEventBoolean(callback))
+	}
+}
+
+func (v *Widget) OnLeaveNotifyEvent(callback func(*gdk.Event) bool) {
+	if v != nil {
+		v.Connect("leave-notify-event", gdk.CallbackEventBoolean(callback))
 	}
 }
