@@ -7,7 +7,6 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/untoldwind/amintk/cairo"
 	"github.com/untoldwind/amintk/gdk"
 	"github.com/untoldwind/amintk/glib"
 )
@@ -543,11 +542,5 @@ func (v *Widget) OnLeaveNotifyEvent(callback func(*gdk.Event) bool) {
 func (v *Widget) OnSizeAllocate(callback func(rect *gdk.Rectangle)) {
 	if v != nil {
 		v.Connect("size-allocate", gdk.CallbackRectangleVoid(callback))
-	}
-}
-
-func (v *Widget) OnDraw(callback func(context *cairo.Context) bool) {
-	if v != nil {
-		v.Connect("draw", cairo.CallbackContextBoolean(callback))
 	}
 }
