@@ -63,5 +63,7 @@ func sourceAttach(src *C.struct__GSource, f func()) (SourceHandle, error) {
 }
 
 func (s SourceHandle) Remove() {
-	C.g_source_remove(C.guint(s))
+	if s > 0 {
+		C.g_source_remove(C.guint(s))
+	}
 }
